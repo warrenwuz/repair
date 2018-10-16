@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.tysf.gt.dao.IRepairProjectDao">
+	<resultMap type="org.tysf.gt.pojo.RepairProject" id="Project">
+		<id property="rpid" javaType="_int" column="rpid" />
+		<result property="rpname" javaType="string" column="rpname" />
+		<association property="repairArea" javaType="org.tysf.gt.pojo.RepairArea">
+			<id property="raid" javaType="_int" column="raid" />
+			<result property="raname" javaType="string" column="raname" />
+		</association>
+	</resultMap>
+	<select id="queryRepairProject" resultMap="Project">
+	select rpid,rpname,raname from repairproject rp,repairarea ra where rp.raid=ra.raid
+	</select>
+	<select id="queryRepairProjectByRaid" resultMap="Project">
+		select rpid,rpname,raname from repairproject rp,repairarea ra where rp.raid=#{repairArea.raid} and rp.raid=ra.raid
+	</select>
+	<insert id="repairProjectAddGetRpid" useGeneratedKeys="true" keyProperty="rpid" parameterType="org.tysf.gt.pojo.RepairProject">
+	  insert into repairproject(rpname,raid) values(#{rpname},#{repairArea.raid})
+	</insert>
+	<update id="repairProjectModify" parameterType="org.tysf.gt.pojo.RepairProject">
+	  update repairproject set rpname=#{rpname},raid=#{repairArea.raid}  where rpid=#{rpid}
+	</update>
+	<select id="queryProjectByRmid" parameterType="string" resultMap="Project" >
+         select rp.rpid,rpname,raname from repairman_repairproject rm_rp,repairproject rp,repairarea ra
+         where  rp.rpid=rm_rp.rpid and rp.raid=ra.raid and rm_rp.rmid=#{rmid}
+         </select>
+    <select id="queryUnSelectRepairProject" parameterType="string" resultMap="Project">
+     	select rpid,rpname,raname from repairproject rp,repairarea ra where rp.raid=ra.raid
+        and rpid not in(select rp.rpid  from repairman_repairproject rm_rp,repairproject rp,repairarea ra
+         where  rp.rpid=rm_rp.rpid and rp.raid=ra.raid and rm_rp.rmid=#{rmid})
+    
+    </select>
+</mapper>

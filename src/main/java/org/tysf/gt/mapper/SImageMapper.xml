@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.tysf.gt.dao.ISimageDao">
+    <resultMap type="org.tysf.gt.pojo.SImage" id="SIamge">
+      <id property="simageid" javaType="string" column="simageid"/>
+      <result property="simagepath" javaType="string" column="simagepath"/>
+      <result property="wpid" javaType="string" column="wpid"/>
+      <result property="timestamp" javaType="java.sql.Timestamp"  column="timestamp"/>
+       <result property="imagetype" javaType="_int" column="imagetype"/>
+    </resultMap> 
+     <insert id="addSImage" parameterType="org.tysf.gt.pojo.SImage">
+     insert into simage(simageid,simagepath,timestamp,imagetype) values(#{simageid},#{simagepath},#{timestamp},#{imagetype})
+     
+     </insert>
+</mapper>

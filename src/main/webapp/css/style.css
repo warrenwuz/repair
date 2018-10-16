@@ -1,0 +1,26 @@
+.bs-docs-sidenav>li>a:hover {
+	text-decoration: none;
+	color: red;
+}
+table { table-layout: fixed;}
+th {
+	text-align: center;
+}
+
+td {
+	text-align: center;
+	white-space: nowrap; /*控制单行显示*/
+	overflow: hidden; /*超出隐藏*/
+	text-overflow: ellipsis; /*隐藏的字符用省略号表示*/
+}
+.addressTable	tr:hover {
+	background-color: #0088CC;
+	cursor: pointer;
+	//将鼠标改变成手势
+}
+a:hover {
+	text-decoration: none;
+}
+.menulink{
+	margin-top: 15px;
+}

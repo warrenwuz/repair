@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.tysf.gt.dao.IStudentMsgDao">
+	<resultMap type="org.tysf.gt.pojo.StudentMsg" id="StudentMsg">
+		<id column="stuid" javaType="string" property="stuid" />
+		<result column="sname" javaType="string" property="sname" />
+		<result column="dormitory" javaType="string" property="dormitory" />
+		<result column="tel" javaType="string" property="tel" />
+		<result column="password" javaType="string" property="password" />
+		<result column="openid" javaType="string" property="openid"/>
+		 <association property="flat" javaType="org.tysf.gt.pojo.Flat">
+		     <id column="fid" javaType="int" property="fid" />
+		   <result column="fname" javaType="string" property="fname" />
+		 </association> 
+	</resultMap>
+	<select id="queryStudentMsg" resultMap="StudentMsg">
+		select stuid,sname,fname,dormitory,tel,openid from studentmsg s,flat f where s.fid=f.fid 
+	</select>
+	<update parameterType="org.tysf.gt.pojo.StudentMsg" id="modifyStuMsg">
+	  update studentmsg set fid=#{flat.fid}, tel=#{tel},dormitory=#{dormitory}
+	  where stuid=#{stuid}
+	</update>
+	<insert id="addstuMsgManager" parameterType="org.tysf.gt.pojo.StudentMsg">
+	  insert into studentmsg (stuid,sname,fid,dormitory,tel,password)  values
+	  (#{stuid},#{sname},#{flat.fid},#{dormitory},#{tel},#{password})
+	</insert>
+	<select id="queryStuidByopenid" parameterType="string" resultType="string">
+	  select stuid from studentmsg where openid=#{openid}
+	</select>
+	<select id="queryStudentMsgByStuidAndPassword" resultMap="StudentMsg">
+	  select stuid,openid from studentmsg where stuid=#{stuid} and password=#{password}
+	</select>
+	<update id="updateOpenidByStuid" parameterType="org.tysf.gt.pojo.StudentMsg" >
+	  update studentmsg set openid=#{openid} where stuid=#{stuid}
+	</update>
+	<select id="queryStudentMsgByOpenid" resultMap="StudentMsg">
+	select stuid,sname,tel,f.fid fid,fname,dormitory from studentmsg s,flat f where s.openid=#{openid} and s.fid=f.fid
+	</select>
+	<update id="unbindByOpenid" parameterType="string">
+	update studentmsg set openid='' where openid=#{openid}
+	</update>
+</mapper>

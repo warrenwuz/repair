@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans      
+                        http://www.springframework.org/schema/beans/spring-beans-3.1.xsd      
+                        http://www.springframework.org/schema/context      
+                        http://www.springframework.org/schema/context/spring-context-3.1.xsd      
+                        http://www.springframework.org/schema/mvc      
+                        http://www.springframework.org/schema/mvc/spring-mvc-4.0.xsd">
+
+	<!-- 引入配置文件 -->
+	<bean id="propertyConfigurer"
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="location" value="classpath:jdbc.properties" />
+	</bean>
+	<bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource"
+		destroy-method="close">
+		<!--数据库连接参数 -->
+		<property name="driverClass" value="${jdbc.driver}"></property>
+		<property name="jdbcUrl" value="${jdbc.url}"></property>
+		<property name="user" value="${jdbc.username}"></property>
+		<property name="password" value="${jdbc.password}"></property>
+		<!-- 其他参数配置 -->
+		<property name="acquireIncrement" value="2"></property>
+		<property name="maxIdleTime" value="10"></property>
+		<property name="maxPoolSize" value="30"></property>
+		<property name="minPoolSize" value="2"></property>
+		<property name="initialPoolSize" value="2"></property>
+	</bean>
+    <!--mybatis的分页插件  -->
+     <bean id="PageInterector" class="com.github.pagehelper.PageInterceptor">
+		 	<property name="properties">
+		          <!--使用下面的方式配置参数，一行配置一个，后面会有所有的参数介绍 -->
+		          <value>
+		　　　　　　　　helperDialect=mysql
+		　　　　　　　　reasonable=true
+		　　　　　　　　supportMethodsArguments=true
+		　　　　　　　　params=count=countSql
+		　　　　　　　　autoRuntimeDialect=true
+		　　　　　　</value>
+		    </property>
+      </bean> 
+	<!-- spring和MyBatis完美整合，不需要mybatis的配置映射文件 -->
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="dataSource" />
+		<!--自动扫描mapping.xml文件 -->
+		<property name="mapperLocations" value="classpath:org/tysf/gt/mapper/*.xml"></property>
+	    <!--引入mybatis的分页插件  -->
+	    <property name="plugins"> <ref bean="PageInterector"/></property>
+	</bean>
+
+</beans>    

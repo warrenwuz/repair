@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.tysf.gt.dao.IWxOnlineRepairMsgDao">
+	<resultMap type="org.tysf.gt.pojo.WxOnlineRepairMsg" id="WxOnlineRepairMsg">
+		<id property="wpid" javaType="string" column="wpid" />
+		<result property="tel" javaType="string" column="tel" />
+		<result property="projectdetail" javaType="string" column="projectdetail" />
+		<result property="timestamp" javaType="java.sql.Timestamp"
+			column="timestamp" />
+		<result property="status" javaType="_int" column="status" />
+		<result property="dispatchingType" javaType="_int" column="dispatchingType" />
+		<result property="remark" javaType="string" column="remark" />
+		<result property="completeremark" javaType="string" column="completeremark" />
+		<!-- 报修学生信息 -->
+		<association property="studentMsg" javaType="org.tysf.gt.pojo.StudentMsg"
+			column="stuid" select="queryStudentMsgById">
+		</association>
+		<!-- 报修订单对应的报修项目 -->
+		<association property="repairProject" javaType="org.tysf.gt.pojo.RepairProject"
+			column="rpid" select="queryRepairProjectByRpid">
+		</association>
+		<!-- 派工管理员信息 -->
+		<association property="arrangeAdmin" javaType="org.tysf.gt.pojo.Administrator"
+			column="arrangeadminid" select="queryAdminByAdminid">
+		</association>
+		<!-- 审核管理员信息 -->
+		<association property="checkAdmin" javaType="org.tysf.gt.pojo.Administrator"
+			column="checkadminid" select="queryAdminByAdminid">
+		</association>
+		<!-- 维修人员信息 -->
+		<association property="repairman" javaType="org.tysf.gt.pojo.Repairman"
+			column="rmid" select="queryRepairManByRmid">
+		</association>
+		<!-- 上传图片信息 -->
+		<collection property="simage" ofType="org.tysf.gt.pojo.SImage"
+			column="wpid" select="querySimageByWpid">
+		</collection>
+		<!-- 日志记录 -->
+		<collection property="repairLog" ofType="org.tysf.gt.pojo.RepairLog"
+			column="wpid" select="org.tysf.gt.dao.IRepairLogDao.queryRepairLogByWpid">
+		</collection>
+	</resultMap>
+	<!-- 学生信息映射 -->
+	<resultMap type="org.tysf.gt.pojo.StudentMsg" id="StudentMsg">
+		<id column="stuid" javaType="string" property="stuid" />
+		<result column="sname" javaType="string" property="sname" />
+		<result column="dormitory" javaType="string" property="dormitory" />
+		<result column="openid" javaType="string" property="openid"/>
+		<association property="flat" javaType="org.tysf.gt.pojo.Flat"
+			column="fid" select="queryFlatById">
+		</association>
+	</resultMap>
+	<!-- 公寓信息映射 -->
+	<resultMap type="org.tysf.gt.pojo.Flat" id="Flat">
+		<id column="fid" javaType="int" property="fid" />
+		<result column="fname" javaType="string" property="fname" />
+	</resultMap>
+	<!-- 报修项目映射 -->
+	<resultMap type="org.tysf.gt.pojo.RepairProject" id="Project">
+		<id property="rpid" javaType="_int" column="rpid" />
+		<result property="rpname" javaType="string" column="rpname" />
+		<association property="repairArea" javaType="org.tysf.gt.pojo.RepairArea"
+			column="raid" select="queryRepairAreaByRaid">
+		</association>
+	</resultMap>
+	<!-- 报修区域映射 -->
+	<resultMap type="org.tysf.gt.pojo.RepairArea" id="Area">
+		<id property="raid" javaType="_int" column="raid" />
+		<result property="raname" javaType="string" column="raname" />
+	</resultMap>
+	<!-- 维修人员映射 -->
+	<resultMap type="org.tysf.gt.pojo.Repairman" id="Repairman">
+		<id property="rmid" javaType="string" column="rmid" />
+		<result property="rmname" javaType="string" column="rmname" />
+		<result property="rmopenid" javaType="string" column="rmopenid"/>
+			<result property="rmtel" javaType="string" column="rmtel"/>
+	</resultMap>
+	<!-- 管理人员映射 -->
+	<resultMap type="org.tysf.gt.pojo.Administrator" id="Administrator">
+		<id property="adminid" javaType="string" column="adminid" />
+		<result property="adminname" javaType="string" column="adminname" />
+	</resultMap>
+	<!-- 上传图片信息 -->
+	<resultMap type="org.tysf.gt.pojo.SImage" id="SIamge">
+		<id property="simageid" javaType="string" column="simageid" />
+		<result property="simagepath" javaType="string" column="simagepath" />
+		<result property="imagetype" javaType="_int" column="imagetype" />
+	</resultMap>
+	<!-- 查找学生信息 -->
+	<select id="queryStudentMsgById" parameterType="string"
+		resultMap="StudentMsg">
+		select stuid,sname,dormitory,fid,openid from studentmsg where
+		stuid=#{stuid}
+	</select>
+	<!-- 查找公寓信息 -->
+	<select id="queryFlatById" parameterType="_int" resultMap="Flat">
+		select fid,fname from flat where fid=#{fid}
+	</select>
+	<!-- 查找报修项目信息 -->
+	<select id="queryRepairProjectByRpid" resultMap="Project"
+		parameterType="_int">
+		select rpid,rpname,raid from repairproject where
+		rpid=#{rpid}
+	</select>
+	<!-- 查找报修区域信息 -->
+	<select id="queryRepairAreaByRaid" resultMap="Area"
+		parameterType="_int">
+		select raid,raname from repairarea where raid=#{raid}
+	</select>
+	<!-- 查找报修人员信息 -->
+	<select id="queryRepairManByRmid" resultMap="Repairman"
+		parameterType="string">
+		select rmid,rmname,rmopenid,rmtel from repairman where rmid=#{rmid}
+	</select>
+	<!-- 查找管理人员信息 -->
+	<select id="queryAdminByAdminid" resultMap="Administrator"
+		parameterType="string">
+		select adminid,adminname from admin where
+		adminid=#{adminid}
+	</select>
+	<!-- 查找上传图片信息 -->
+	<select id="querySimageByWpid" resultMap="SIamge" parameterType="string">
+		select simageid,simagepath,imagetype from simage where wpid=#{wpid}
+	</select>
+	<!-- 增加报修信息 -->
+	<insert id="addWxOnlineRepairMsg" parameterType="org.tysf.gt.pojo.WxOnlineRepairMsg">
+		insert into
+		wxonlinerepairmsg(wpid,stuid,projectdetail,rpid,timestamp,status,tel)values(#{wpid},#{studentMsg.stuid},#{projectdetail},#{repairProject.rpid},#{timestamp},#{status},#{tel})
+	</insert>
+	<!-- 查找报修信息 -->
+	<select id="queryWxOnlineRepairMsg" resultMap="WxOnlineRepairMsg">
+		select wpid,stuid,rpid,status,tel,projectdetail,timestamp from wxonlinerepairmsg 
+		<if test="status!=-1">
+		 where status=#{status}
+		</if>
+	    order by timestamp desc
+	</select>
+	<!-- 更新报修图片 -->
+	<update id="addSImagesByWpid" parameterType="map">
+		update simage set wpid=#{wpid},imagetype=#{imagetype} where simageid
+		in
+		<foreach collection="uploadImages" item="simageid" open="("
+			close=")" separator=",">
+			#{simageid}
+		</foreach>
+	</update>
+	<!-- 查找报修细节 -->
+	<select id="queryrepairMsgDetailByWpid" resultMap="WxOnlineRepairMsg" parameterType="string">
+		select
+		wpid,remark,stuid,rpid,completeremark,arrangeadminid,checkadminid,rmid,remark,dispatchingType,tel,status,projectdetail,timestamp
+		FROM wxonlinerepairmsg where wpid=#{wpid}
+	</select>
+	<!-- 派工 -->
+	<update id="addWxOnlineRepairmanAndRemark">
+		update wxonlinerepairmsg set
+		rmid=#{repairman.rmid},dispatchingType=#{dispatchingType},status=1,arrangeadminid=#{arrangeAdmin.adminid}
+		<if test="remark!=null">,remark=#{remark} </if>
+		where wpid=#{wpid}
+	</update>
+	<!-- 查找维修状态 -->
+	<select id="queryWxOnlineRepairMsgStatus" parameterType="string"
+		resultType="_int">
+		select status from wxonlinerepairmsg where wpid=#{wpid}
+	</select>
+	<select id="queryRepairmanForFree" resultType="string">
+		select rmid from
+		repairmanfree
+	</select>
+	<!-- 查找未派工的维修单 -->
+	<select id="queryCountUnCheck" resultType="int">
+	select count(wpid) from  wxonlinerepairmsg where status=0
+	</select>
+	<!-- 更新维修状态 -->
+	<update id="updateStatusByWpid" parameterType="string">
+		update
+		wxonlinerepairmsg set status=2 where wpid=#{wpid}
+	</update>
+	<!-- 查找维修师傅的维修记录 -->
+	<select id='queryrepairmanRecode' parameterType="string"
+		resultMap="WxOnlineRepairMsg">
+	     select
+		wpid,remark,stuid,rpid,completeremark,arrangeadminid,checkadminid,rmid,remark,dispatchingType,tel,status,projectdetail,timestamp
+		FROM wxonlinerepairmsg where rmid=#{rmid} order by timestamp desc
+	</select>
+	<!-- 完工 -->
+	<update id="addCompleteRemarkAndStatusByWpid" parameterType="org.tysf.gt.pojo.WxOnlineRepairMsg">
+		update wxonlinerepairmsg set completeremark=#{completeremark},status=3 where wpid=#{wpid}
+	</update>
+	<!-- 验收 -->
+	<update id="checkAndAcceptance" parameterType="string">
+		update
+		wxonlinerepairmsg set status=4 where wpid=#{wpid}
+	</update>
+</mapper>

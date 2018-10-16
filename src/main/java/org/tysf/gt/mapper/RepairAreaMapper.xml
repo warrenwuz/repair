@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.tysf.gt.dao.IRepairAreaDao">
+    <resultMap type="org.tysf.gt.pojo.RepairArea" id="Area">
+      <id property="raid" javaType="_int" column="raid"/>
+      <result property="raname" javaType="string" column="raname"/>
+    </resultMap> 
+     <select id="queryRepairArea" resultMap="Area">
+       select raid,raname from repairarea 
+     </select>
+     <insert id="addRepairAreaGetRaid" parameterType="string" keyProperty="raid" useGeneratedKeys="true">
+        insert into repairarea(raname) values(#{raname})
+     </insert>
+     <update id="modifyRepairArea" parameterType="org.tysf.gt.pojo.RepairArea">
+      update repairarea set raname=#{raname} where raid=#{raid}
+     
+     </update>
+</mapper>

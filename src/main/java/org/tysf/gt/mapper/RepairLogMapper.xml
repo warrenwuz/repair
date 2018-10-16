@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.tysf.gt.dao.IRepairLogDao">
+	<resultMap type="org.tysf.gt.pojo.RepairLog" id="RepairLog">
+		<id property="id" javaType="int" column="id" />
+		<result property="repairLog" javaType="string" column="repair_log" />
+		<result property="logDate" javaType="java.sql.Timestamp" column="log_date" />
+		<result property="wpid" javaType="string" column="wpid" />
+	</resultMap>
+	<!--查找日志记录 -->
+     <select id="queryRepairLogByWpid" resultMap="RepairLog" parameterType="string">
+     select id,repair_log,log_date from repair_log where wpid=#{wpid}
+     order by log_date asc
+     </select>
+     <!-- 插入日志记录 -->
+     <insert id="addRepairLog">
+       insert into repair_log(repair_log,wpid) values(#{repairLog},#{wpid})
+     </insert>
+</mapper>

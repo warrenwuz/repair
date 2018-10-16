@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.tysf.gt.dao.IFlatDao">
+    <resultMap type="org.tysf.gt.pojo.Flat" id="flat">
+      <id property="fid" javaType="_int" column="fid"/>
+      <result property="fname" javaType="string" column="fname"/>
+    </resultMap> 
+      <select id="queryFlatAll" resultMap="flat">
+      select fid ,fname from flat
+      </select>
+      <insert id="addFlat" parameterType="org.tysf.gt.pojo.Flat">
+        insert into flat(fid,fname)values(#{fid},#{fname})
+      </insert>
+      <update id="modifyFlat" parameterType="org.tysf.gt.pojo.Flat">
+         update flat set fname=#{fname} where fid=#{fid}
+      </update>
+</mapper>

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.tysf.gt.dao.IAdministratorDao">
+	<resultMap type="org.tysf.gt.pojo.Administrator" id="Administrator">
+		<id property="adminid" javaType="string" column="adminid" />
+		<result property="adminname" javaType="string" column="adminname" />
+		<result property="admintel" javaType="string" column="admintel" />
+		<result property="adminpassword" javaType="string" column="adminpassword" />
+       <result property="authorization" javaType="_int" column="authorization"/>
+	</resultMap>
+   <select id="queryAdminByIdAndPassword" resultMap="Administrator">
+    select adminid,adminname from admin where adminid=#{adminid} and adminpassword=#{adminpassword} and
+    authorization=#{authorization}
+   </select>
+    <select id="queryAdmin" resultMap="Administrator">
+    select adminid,adminname,admintel,authorization from admin 
+   </select>
+   <insert id="addAdministrator"  parameterType="org.tysf.gt.pojo.Administrator" >
+   insert into admin(adminid,adminname,admintel,adminpassword,authorization)
+   values(#{adminid},#{adminname},#{admintel},#{adminpassword},1)
+   </insert>
+   <update id="modifyAdministratorNameAndPassword" parameterType="org.tysf.gt.pojo.Administrator">
+    update admin set adminname=#{adminname},adminpassword=#{adminpassword}
+    where adminid=#{adminid}
+   </update>
+   <update id="modifyAdministratorTel" parameterType="org.tysf.gt.pojo.Administrator">
+     update admin set admintel=#{admintel} where adminid=#{adminid}
+   </update>
+</mapper>

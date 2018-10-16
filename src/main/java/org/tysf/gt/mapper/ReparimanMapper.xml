@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.tysf.gt.dao.IRepairmanDao">
+	<resultMap type="org.tysf.gt.pojo.Repairman" id="Repairman">
+		<id property="rmid" javaType="string" column="rmid" />
+		<result property="rmname" javaType="string" column="rmname" />
+		<result property="rmtel" javaType="string" column="rmtel" />
+		<result property="rmpassword" javaType="string" column="rmpassword" />
+		<result property="rmopenid" javaType="string" column="rmopenid" />
+		<collection property="repairProject" ofType="org.tysf.gt.pojo.RepairProject">
+			<id property="rpid" javaType="_int" column="rpid" />
+			<result property="rpname" javaType="string" column="rpname" />
+
+		</collection>
+	</resultMap>
+	<insert id="addRepairman" parameterType="org.tysf.gt.pojo.Repairman">
+		insert
+		repairman(rmid,rmname,rmtel,rmpassword)
+		values(#{rmid},#{rmname},#{rmtel},#{rmpassword})
+	</insert>
+	<select id="queryRepariman" resultMap="Repairman">
+		select rmid,rmname,rmtel
+		from repairman
+	</select>
+	<insert id="addRepairProjectByRmid" parameterType="map">
+		insert
+		repairman_repairproject(rpid,rmid)values(#{rpid},#{rmid})
+	</insert>
+	<update id="modifyRepairmanNameAndPassword" parameterType="org.tysf.gt.pojo.Repairman">
+		update repairman set rmname=#{rmname},rmpassword=#{rmpassword}
+		where rmid=#{rmid}
+	</update>
+	<update id="modifyRepairmanTel" parameterType="org.tysf.gt.pojo.Repairman">
+		update repairman set rmtel=#{rmtel}
+		where rmid=#{rmid}
+	</update>
+	<select id="queryRmidByopenid" parameterType="string" resultType="string">
+	select rmid from repairman where rmopenid=#{rmopenid}
+	</select>
+	<select id="bindWxRepairmanSystem" resultMap="Repairman">
+	select rmid,rmopenid from repairman where rmid=#{rmid} and rmpassword=#{rmpassword}
+	</select>
+	<update id="updateOpenidByRmid" parameterType="org.tysf.gt.pojo.Repairman">
+	update repairman set rmopenid=#{rmopenid} where rmid=#{rmid}
+	</update>
+	<update id="unbindByOpenid" parameterType="string">
+	update repairman set rmopenid='' where rmopenid=#{rmopenid}
+	</update>
+</mapper>

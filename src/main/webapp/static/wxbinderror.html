@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="viewport"
+	content="width=device-width,initial-scale=1,user-scalable=0">
+<title>提示消息</title>
+<link href="https://res.wx.qq.com/open/libs/weui/1.1.2/weui.min.css"
+	rel="stylesheet" />
+<script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+</head>
+<script>
+	$().ready(function() {
+		$("#confirm").click(function() {
+			WeixinJSBridge.call('closeWindow');
+		})
+	})
+</script>
+
+<body>
+	<div class="page">
+    <div class="weui-msg">
+        <div class="weui-msg__icon-area"><i class="weui-icon-info weui-icon_msg"></i></div>
+         <div class="weui-msg__text-area">
+            <h2 class="weui-msg__title">你已经绑定平台</h2>
+            <p class="weui-msg__desc">你可以随时接受到太原师范学院在线保修平台发布的消息,也可以在在线报修</p>
+        </div>
+        <div class="weui-msg__opr-area">
+            <p class="weui-btn-area">
+                <a href="javascript:;" class="weui-btn weui-btn_primary" id="confirm">确定</a>
+            </p>
+        </div>
+        <div class="weui-msg__extra-area">
+            <div class="weui-footer">
+                <p class="weui-footer__text">Copyright &copy; 2017-2018 太原师范学院在线报修平台</p>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
